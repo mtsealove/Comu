@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--언어 챕터 저장-->
+    <string-array name="java_chapter">
+        <item>variable</item>
+        <item>if-else</item>
+        <item>for</item>
+        <item>while</item>
+        <item>switch</item>
+        <item>array</item>
+        <item>class</item>
+        <item>intance</item>
+        <item>constructor</item>
+        <item>intanceof</item>
+    </string-array>
+
+    <string-array name="cplus">
+        <item>variable</item>
+        <item>if-else</item>
+        <item>for</item>
+        <item>while</item>
+        <item>switch</item>
+        <item>class</item>
+        <item>array</item>
+        <item>class</item>
+        <item>intance</item>
+        <item>constructor</item>
+        <item>intanceof</item>
+    </string-array>
+
+    <string-array name="c">
+        <item>variable</item>
+        <item>if-else</item>
+        <item>for</item>
+        <item>while</item>
+        <item>switch</item>
+        <item>array</item>
+        <item>pointer</item>
+    </string-array>
+
+</resources>
