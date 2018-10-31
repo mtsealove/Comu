@@ -85,7 +85,7 @@ public class Load extends AppCompatActivity {
     protected void move_login(int Login_index) { //로그인 인덱스를 받아 로그인 페이지로 이동하거나 메인 페이지로 이동
             Intent intent;
             if(Login_index==Account.non_member) intent=new Intent(Load.this, Member.class);
-            else intent=new Intent(Load.this, Select_language.class);
+            else intent=new Intent(Load.this, Main.class);
             startActivity(intent);
             finish();
     }

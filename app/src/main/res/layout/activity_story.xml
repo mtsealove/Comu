@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/tmp_background">
+    android:background="@drawable/tmp_background"
+    >
 
     <ImageView
         android:layout_width="360dp"
@@ -12,30 +13,31 @@
         android:src="@drawable/man" />
 
     <RelativeLayout
+        android:id="@+id/script"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_gravity="bottom"
-        android:background="#CCBDBDBD">
+        android:background="@drawable/conversation">
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:text="이름"
             android:textColor="#FFFFFF"
-            android:textSize="25sp"
-            android:layout_margin="20dp"/>
+            android:textSize="25sp" />
 
         <TextView
-            android:layout_marginTop="-10dp"
-            android:layout_below="@id/name"
-            android:layout_marginHorizontal="20dp"
-            android:id="@+id/conversation"
+            android:id="@+id/comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:textColor="#FFFFFF"
+            android:layout_below="@id/name"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="-10dp"
             android:text="대화내용"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
 
             />
     </RelativeLayout>

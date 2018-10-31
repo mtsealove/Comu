@@ -30,7 +30,7 @@ public class Member extends AppCompatActivity {
         non_member.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent main=new Intent(Member.this, Select_language.class);
+                Intent main=new Intent(Member.this, Main.class);
                 Account.current=Account.non_member;
                 startActivity(main);
                 finish();
@@ -81,7 +81,7 @@ public class Member extends AppCompatActivity {
                             check=true;
                             Account.current=index;
                             //메인 페이지로 이동
-                            Intent main=new Intent(Member.this, Select_language.class);
+                            Intent main=new Intent(Member.this, Main.class);
                             startActivity(main);
                             if(keep_login.isChecked()) {
                                 File Logined=new File(getFilesDir()+"logined.dat");
