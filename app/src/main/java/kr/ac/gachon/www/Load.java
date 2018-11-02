@@ -13,7 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Load extends AppCompatActivity {
-    static Account[] accounts=new Account[Account.non_member+1]; //계정정보를 저장할 인스턴스 배열
+    static Account[] accounts=new Account[Account.non_member+2]; //계정정보를 저장할 인스턴스 배열
+    final String manager_id="manager", manager_pw="password"; //관리자 계정
 
     //정보를 로딩할 액티비티, 잠시 애플리케이션 로고 출력
     @Override
@@ -29,7 +30,7 @@ public class Load extends AppCompatActivity {
         File account_file=new File(getFilesDir()+"Account.dat");
         try {
             BufferedReader br=new BufferedReader(new FileReader(account_file));
-            String name, id, pasword, fc;
+            String name, id, password, fc, fs, phone;
             int level;
             String tmp="";
             while((tmp=br.readLine())!=null) {
@@ -37,13 +38,17 @@ public class Load extends AppCompatActivity {
                 tmp=br.readLine();
                 id=tmp;
                 tmp=br.readLine();
-                pasword=tmp;
+                phone=tmp;
+                tmp=br.readLine();
+                password=tmp;
                 tmp=br.readLine();
                 level=Integer.parseInt(tmp);
                 tmp=br.readLine();
                 fc=tmp;
+                tmp=br.readLine();
+                fs=tmp;
                 //인스턴스로 생성
-                accounts[count++]=new Account(name, id, pasword, level, fc);
+                accounts[count++]=new Account(name, id, phone, password, level, fc, fs);
             }
             Account.count=count;
             br.close();
@@ -53,7 +58,10 @@ public class Load extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        accounts[Account.non_member]=new Account("비회원", "", "", 1, "");
+        //비회원 계정
+        accounts[Account.non_member]=new Account("비회원", "", "","", 1, "", "");
+        //관리자 계정
+        accounts[Account.manager]=new Account("관리자", manager_id, "", manager_pw, 100, "","");
 
         //로그인 유지 확인
         File Logined=new File(getFilesDir()+"logined.dat");

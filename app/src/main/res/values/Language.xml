@@ -2,16 +2,18 @@
 <resources>
     <!--언어 챕터 저장-->
     <string-array name="java_chapter">
-        <item>variable</item>
-        <item>if-else</item>
-        <item>for</item>
-        <item>while</item>
-        <item>switch</item>
-        <item>array</item>
-        <item>class</item>
-        <item>intance</item>
-        <item>constructor</item>
-        <item>intanceof</item>
+        <item>자바 개발환경 구축</item>
+        <item>나만의 프로그램을 만들어보자</item>
+        <item>변수란 무엇인가</item>
+        <item>String 리터럴</item>
+        <item>조건 if-else</item>
+        <item>조건문 switch</item>
+        <item>반복 for</item>
+        <item>반복문 while</item>
+        <item>배열이란</item>
+        <item>클래스가 뭐야? 먹는거야</item>
+        <item>인스턴스를 활용하자</item>
+        <item>생성자에 관하여</item>
     </string-array>
 
     <string-array name="cplus">

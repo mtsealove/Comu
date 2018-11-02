@@ -26,9 +26,9 @@ public class Select_chapter extends AppCompatActivity {
         String[] chapter = null;
         LayoutInflater inflater=getLayoutInflater();
         LinearLayout layout=(LinearLayout)findViewById(R.id.list_layout);
-        if(lang.equals("java")) chapter=resources.getStringArray(R.array.java_chapter);
-        else if(lang.equals("c")) chapter=resources.getStringArray(R.array.c);
-        else if(lang.equals("cplus")) chapter=resources.getStringArray(R.array.cplus);
+        if(lang.equals("JAVA")) chapter=resources.getStringArray(R.array.java_chapter);
+        else if(lang.equals("C")) chapter=resources.getStringArray(R.array.c);
+        else if(lang.equals("C++")) chapter=resources.getStringArray(R.array.cplus);
 
         View[] sub_list=new View[chapter.length];
         TextView[] name=new TextView[chapter.length];

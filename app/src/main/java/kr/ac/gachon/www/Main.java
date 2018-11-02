@@ -3,17 +3,21 @@ package kr.ac.gachon.www;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main extends AppCompatActivity {
     Button play_btn, friends_btn, setting_btn, info_btn, notice_btn;
@@ -23,8 +27,13 @@ public class Main extends AppCompatActivity {
         super.onCreate(si);
         setContentView(R.layout.activity_main);
 
-        if(!Load.accounts[Account.current].name.equals("비회원")) //비회원이 아니라면 환영 토스트 출력
+        TextView level=(TextView)findViewById(R.id.level);
+        if(!Load.accounts[Account.current].name.equals("비회원")) {//비회원이 아니라면 환영 토스트 출력
             Toast.makeText(Main.this, Load.accounts[Account.current].name+"님 환영합니다", Toast.LENGTH_SHORT).show();
+            level.setText(Load.accounts[Account.current].level+"LV");
+        }
+        else level.setVisibility(View.GONE);
+
 
         //플레이 기능|챕터 선택으로 이동
         Button c=(Button)findViewById(R.id.c);
@@ -34,19 +43,19 @@ public class Main extends AppCompatActivity {
         c.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                move_chapter("c");
+                move_chapter("C");
             }
         });
         java.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                move_chapter("java");
+                move_chapter("JAVA");
             }
         });
         cplus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                move_chapter("cplus");
+                move_chapter("C++");
             }
         });
         //하단 버튼들 매칭
@@ -71,9 +80,17 @@ public class Main extends AppCompatActivity {
         //레이아웃 매칭
         LinearLayout play=(LinearLayout)findViewById(R.id.play);
         LinearLayout setting=(LinearLayout)findViewById(R.id.setting);
+        LinearLayout friends_not_login=(LinearLayout)findViewById(R.id.friends_not_login);
+        LinearLayout friends_login=(LinearLayout)findViewById(R.id.friends_login);
+        LinearLayout notice=(LinearLayout)findViewById(R.id.notice);
+        LinearLayout info=(LinearLayout)findViewById(R.id.my_info);
         //레이아웃 소멸
         play.setVisibility(View.GONE);
         setting.setVisibility(View.GONE);
+        friends_login.setVisibility(View.GONE);
+        friends_not_login.setVisibility(View.GONE);
+        notice.setVisibility(View.GONE);
+        info.setVisibility(View.GONE);
     }
 
     public void set_play(View v) {
@@ -86,16 +103,106 @@ public class Main extends AppCompatActivity {
     public void set_friends(View v) {
         hide_layout();
         friends_btn.setBackground(ContextCompat.getDrawable(Main.this, R.drawable.menu_button_focus));
-    }
+        LinearLayout layout;
+        //로그인 여부에 따라 다른 화면 설정
+        if(Account.current==Account.non_member) layout=(LinearLayout)findViewById(R.id.friends_not_login);
+        else{
+            layout=(LinearLayout)findViewById(R.id.friends_login);
 
-    public void set_notice(View v) {
+            Button friends_list_btn=(Button)findViewById(R.id.friends_list);
+            friends_list_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LayoutInflater inflater=getLayoutInflater();
+                    View dialog_layout=inflater.inflate(R.layout.dialog_friends, null);
+                    LinearLayout friends_list=(LinearLayout)dialog_layout.findViewById(R.id.friends_list);
+
+                    View[] list=new View[Load.accounts[Account.current].friends.length];
+                    TextView[] name=new TextView[Load.accounts[Account.current].friends.length];
+                    if(Load.accounts[Account.current].friends[0].length()!=0)
+                        for(int i=0; i<Load.accounts[Account.current].friends.length; i++) {
+                            list[i]=inflater.inflate(R.layout.sub_friends, null);
+                            name[i]=(TextView)list[i].findViewById(R.id.name);
+                            name[i].setText(Load.accounts[Account.current].friends[i]);
+                            friends_list.addView(list[i]);
+                        }
+                    else {
+                        TextView no_friends=(TextView)friends_list.findViewById(R.id.no_friends);
+                        no_friends.setVisibility(View.VISIBLE);
+                    }
+                    AlertDialog.Builder builder=new AlertDialog.Builder(Main.this);
+                    builder.setView(dialog_layout);
+                    final AlertDialog dialog=builder.create();
+                  dialog.show();
+                }
+            });
+        }
+        layout.setVisibility(View.VISIBLE);
+
+        Button free_board=(Button)findViewById(R.id.free_board);
+        free_board.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent fb=new Intent(Main.this, Free_board.class);
+                startActivity(fb);
+            }
+        });
+
+    }
+    static boolean notice_showed=false; //공지사항을 한번만 읽어오게 설정
+    public void set_notice(View v) { //공지사항
         hide_layout();
         notice_btn.setBackground(ContextCompat.getDrawable(Main.this, R.drawable.menu_button_focus));
+        LinearLayout layout=(LinearLayout)findViewById(R.id.notice);
+        layout.setVisibility(View.VISIBLE);
+        //파일에서 공지 읽어오기
+        if(!notice_showed) {
+            LinearLayout notice_list = (LinearLayout) findViewById(R.id.notice_list);
+            LayoutInflater inflater = getLayoutInflater();
+            View[] list = new View[100];
+            TextView[] listtv = new TextView[100];
+            String[] notices = new String[100];
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open("notice.dat")));
+                String tmp = "";
+                int i = 0;
+                while ((tmp = br.readLine()) != null) {
+                    notices[i] = tmp;
+                    list[i] = inflater.inflate(R.layout.sub_chapter_list, null);
+                    listtv[i] = (TextView) list[i].findViewById(R.id.name);
+                    listtv[i].setText(notices[i]);
+                    notice_list.addView(list[i]);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            notice_showed=true;
+        }
     }
 
-    public void set_info(View v) {
+    public void set_info(View v) { //정보 표시 레이아웃
         hide_layout();
         info_btn.setBackground(ContextCompat.getDrawable(Main.this, R.drawable.menu_button_focus));
+        LinearLayout layout=(LinearLayout)findViewById(R.id.my_info);
+        layout.setVisibility(View.VISIBLE);
+        //정보 설정
+        TextView name=(TextView)findViewById(R.id.name);
+        TextView ID=(TextView)findViewById(R.id.ID);
+        TextView lv=(TextView)findViewById(R.id.level_info);
+        TextView cleared_chapter=(TextView)findViewById(R.id.clear_chapter);
+        name.setText("이름: "+Load.accounts[Account.current].name);
+        ID.setText("ID: "+Load.accounts[Account.current].ID);
+        lv.setText("레벨: "+Load.accounts[Account.current].level+"LV");
+        String chapter="클리어 챕터";
+        try {
+            for (int i = 0; i < Load.accounts[Account.current].finished_chapeter.length; i++) {
+                chapter+="\n"+Load.accounts[Account.current].finished_chapeter[i];
+            }
+        } catch (NullPointerException e) {
+
+        }
+        if(!chapter.equals("클리어 챕터"))
+        cleared_chapter.setText(chapter);
     }
 
     public void set_setting(View v) {
@@ -122,6 +229,7 @@ public class Main extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        notice_showed=false;
         Intent memeber=new Intent(getApplicationContext(), Member.class);
         startActivity(memeber);
         finish();
