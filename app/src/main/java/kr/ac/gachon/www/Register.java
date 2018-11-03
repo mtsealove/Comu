@@ -1,9 +1,14 @@
 package kr.ac.gachon.www;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +36,17 @@ public class Register extends AppCompatActivity {
         Button check_reuse=(Button)findViewById(R.id.check_reuse);
         Button register=(Button)findViewById(R.id.register);
         Button check_phone_reuse=(Button)findViewById(R.id.check_reuse_phone);
+        String myNumber=null;
+        TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        try {
+            if (ActivityCompat.checkSelfPermission(Register.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Register.this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Register.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            myNumber = mgr.getLine1Number();
+            myNumber = myNumber.replace("+82", "0");
+            phone.setText(myNumber);
 
+        }catch(Exception e){}
         check_reuse.setOnClickListener(new View.OnClickListener() { //중복 체크
             @Override
             public void onClick(View v) {
@@ -72,7 +87,7 @@ public class Register extends AppCompatActivity {
                 else if(is_reuse[1]) Toast.makeText(Register.this, "전화번호 중복을 확인하세요", Toast.LENGTH_SHORT).show();
                 else if(!tpassword.equals(tpassword_confirm)) Toast.makeText(Register.this, "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
                 else {
-                    Load.accounts[Account.count+1]=new Account(tname, tID, tphone, tpassword, 1, "", "");
+                    Load.accounts[Account.count+1]=new Account(tname, tID, tphone, tpassword, 1, 0, "", "");
                     File account_file=new File(getFilesDir()+"Account.dat");
                     try {
                         BufferedWriter bw=new BufferedWriter(new FileWriter(account_file, true));
@@ -85,6 +100,8 @@ public class Register extends AppCompatActivity {
                         bw.write(tpassword);
                         bw.newLine();
                         bw.write("1");
+                        bw.newLine();
+                        bw.write("0");
                         bw.newLine();
                         bw.write("");
                         bw.newLine();

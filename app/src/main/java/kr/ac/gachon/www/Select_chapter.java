@@ -37,10 +37,12 @@ public class Select_chapter extends AppCompatActivity {
             sub_list[i]=inflater.inflate(R.layout.sub_chapter_list, null);
             name[i]=(TextView)sub_list[i].findViewById(R.id.name);
             name[i].setText(chapter[i]);
+            final String chapter_string=lang+"."+chapter[i];
             sub_list[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent story=new Intent(Select_chapter.this, Story.class);
+                    story.putExtra("chapter", chapter_string);
                     startActivity(story);
                 }
             });

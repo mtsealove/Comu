@@ -30,7 +30,7 @@ public class Main extends AppCompatActivity {
         TextView level=(TextView)findViewById(R.id.level);
         if(!Load.accounts[Account.current].name.equals("비회원")) {//비회원이 아니라면 환영 토스트 출력
             Toast.makeText(Main.this, Load.accounts[Account.current].name+"님 환영합니다", Toast.LENGTH_SHORT).show();
-            level.setText(Load.accounts[Account.current].level+"LV");
+            display_level();
         }
         else level.setVisibility(View.GONE);
 
@@ -66,6 +66,21 @@ public class Main extends AppCompatActivity {
         info_btn=(Button)findViewById(R.id.info_btn);
 
         play_btn.setBackground(ContextCompat.getDrawable(Main.this, R.drawable.menu_button_focus));
+    }
+    public void display_level() { //정수로 표현된 레벨을 String으로 표시
+        TextView level=(TextView)findViewById(R.id.level);
+        String string_level="나의 레벨: ";
+        int int_level=Load.accounts[Account.current].level;
+        switch (int_level){
+            case 1: string_level+="어린이";
+            break;
+            case 2: string_level+="학생";
+            break;
+            case 3: string_level+="교수";
+            break;
+            default: string_level+="도사";
+        }
+        level.setText(string_level);
     }
 
 
@@ -252,5 +267,10 @@ public class Main extends AppCompatActivity {
             backPressedTime = tempTime;
             Toast.makeText(getApplicationContext(), "뒤로 버튼을 한 번 더 누르면 종료합니다", Toast.LENGTH_SHORT).show();
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        display_level();
     }
 }

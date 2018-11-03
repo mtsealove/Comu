@@ -130,8 +130,9 @@ public class Member extends AppCompatActivity {
         View layout = inflater.inflate(R.layout.dialog_user_certification, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(Member.this);
         builder.setView(layout)
-                .setCancelable(false);
+                .setCancelable(false); //임의 종료 방지
         final EditText phone = (EditText) layout.findViewById(R.id.certification_phone);
+        final EditText name=(EditText)layout.findViewById(R.id.certification_name);
         phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         Button confirm = (Button) layout.findViewById(R.id.confirm_certification);
 
@@ -146,6 +147,7 @@ public class Member extends AppCompatActivity {
                 String original_phone=phone.getText().toString();
                 String[] phone_split=original_phone.split("-");
                 String final_phone="";
+                String names=name.getText().toString();
                 for(int i=0; i<phone_split.length; i++)
                     final_phone+=phone_split[i];
                 try {
@@ -156,12 +158,20 @@ public class Member extends AppCompatActivity {
                     myNumber = myNumber.replace("+82", "0");
 
                 }catch(Exception e){}
-                if(myNumber.equals(final_phone)) {
+
+                boolean exist=false;
+                for(int i=0; i<Account.count; i++) { //저장된 계정에 존재하는지 확인
+                    if(Load.accounts[i].name.equals(names)&&Load.accounts[i].phone.equals(original_phone))
+                        exist=true;
+                }
+                if(names.length()==0) Toast.makeText(Member.this, "이름을 입력하세요", Toast.LENGTH_SHORT).show();
+                else if(original_phone.length()==0) Toast.makeText(Member.this, "전화번호를 입력하세요", Toast.LENGTH_SHORT).show();
+                else if(myNumber.equals(final_phone)&&exist) { //휴대전화번호와 일치하는지 확인
                     cdialog.cancel();
                     login_count=0;
                     Toast.makeText(Member.this, "본인인증이 완료되었습니다", Toast.LENGTH_SHORT).show();
                 }
-                else {
+                else { //메세지를 출력하고 게임을 종료함
                     Toast.makeText(Member.this, "본인이 아닙니다\n게임을 종료합니다", Toast.LENGTH_SHORT).show();
                     Handler handler=new Handler();
                     handler.postDelayed(new Runnable() {
@@ -169,7 +179,7 @@ public class Member extends AppCompatActivity {
                         public void run() {
                             System.exit(0);
                         }
-                    }, 1000);
+                    }, 2000);
                 }
             }
         });

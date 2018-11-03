@@ -46,23 +46,24 @@
             android:layout_marginBottom="30dp">
 
             <TextView
+                android:id="@+id/select_lang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="언어 선택"
                 android:textSize="35sp"
                 android:textColor="#FFFFFF"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
                 />
 
             <TextView
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:id="@+id/level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:layout_below="@id/select_lang"
+                android:layout_marginTop="5dp"
+                android:text="나의 레벨: 도사"
                 android:textColor="#FFFFFF"
-                android:text="level"/>
+                android:textSize="20sp" />
         </RelativeLayout>
 
 
@@ -195,7 +196,8 @@
     <!--내 정보 레이아웃-->
     <LinearLayout
         android:visibility="gone"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="130dp"
+        android:layout_marginBottom="100dp"
         android:id="@+id/my_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -234,15 +236,20 @@
             android:text="레벨: 0LV"
             android:textSize="24sp"/>
 
-        <TextView
-            android:id="@+id/clear_chapter"
+        <ScrollView
             android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="20dp"
-            android:textColor="#FFFFFF"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="클리어 챕터한 챕터가 없습니다"
-            android:textSize="24sp"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/clear_chapter"
+                android:layout_marginHorizontal="20dp"
+                android:textColor="#FFFFFF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="클리어 챕터한 챕터가 없습니다"
+                android:textSize="24sp"/>
+        </ScrollView>
+
     </LinearLayout>
 
 

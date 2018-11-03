@@ -12,6 +12,13 @@
         android:layout_marginLeft="-100dp"
         android:src="@drawable/man" />
 
+    <ImageView
+        android:layout_width="360dp"
+        android:layout_height="394dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="-100dp"
+        android:src="@drawable/man" />
+
     <RelativeLayout
         android:id="@+id/script"
         android:layout_width="match_parent"
